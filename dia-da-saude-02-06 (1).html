@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dia da Saúde — MF Performance</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0e0e0e;
+      --surface: #141414;
+      --card: #181818;
+      --border: #2c2c2c;
+      --border-light: #323232;
+      --accent: #E8601C;
+      --accent-soft: rgba(232,96,28,0.12);
+      --accent-line: rgba(232,96,28,0.3);
+      --text-primary: #EFEFEF;
+      --text-secondary: #AAAAAA;
+      --text-tertiary: #666666;
+      --input-bg: #111111;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text-primary);
+      font-family: 'Montserrat', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 20px 80px;
+      overflow-x: hidden;
+    }
+
+    /* thin top line */
+    .top-line {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 2px;
+      background: var(--accent);
+      z-index: 200;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      width: 100%;
+      max-width: 580px;
+      padding: 64px 0 44px;
+      text-align: center;
+    }
+
+    /* LOGO */
+    .logo-wrap { margin-bottom: 36px; display: flex; justify-content: center; }
+
+    .event-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid var(--accent-line);
+      border-radius: 1px;
+      padding: 7px 16px;
+      margin-bottom: 28px;
+    }
+
+    .event-pill::before {
+      content: '';
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: blink 2.4s ease-in-out infinite;
+    }
+
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+    .hero-eyebrow {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+      margin-bottom: 14px;
+    }
+
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(64px, 16vw, 96px);
+      font-weight: 300;
+      line-height: 0.88;
+      letter-spacing: -0.01em;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .hero-rule {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 28px auto;
+      max-width: 280px;
+    }
+
+    .hero-rule::before,
+    .hero-rule::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border-light);
+    }
+
+    .hero-rule span {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+      white-space: nowrap;
+    }
+
+    .hero-desc {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 13.5px;
+      font-weight: 300;
+      color: var(--text-secondary);
+      line-height: 1.85;
+      max-width: 400px;
+      margin: 0 auto;
+      letter-spacing: 0.02em;
+    }
+
+    .hero-desc strong {
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    /* ── FORM CARD ── */
+    .form-card {
+      width: 100%;
+      max-width: 580px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-top: 2px solid var(--accent);
+      border-radius: 2px;
+      padding: 48px 44px;
+      position: relative;
+    }
+
+    /* section headers */
+    .section-head {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+
+    .section-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      font-weight: 300;
+      color: var(--accent);
+      line-height: 1;
+      opacity: 0.6;
+      min-width: 24px;
+    }
+
+    .section-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+    }
+
+    .section-head::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .sep { height: 1px; background: var(--border); margin: 36px 0; }
+
+    /* fields */
+    .field-group { margin-bottom: 20px; }
+
+    .field-label {
+      display: block;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: 9px;
+    }
+
+    input[type="text"],
+    input[type="tel"],
+    input[type="number"],
+    select,
+    textarea {
+      width: 100%;
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      border-radius: 1px;
+      color: var(--text-primary);
+      font-family: 'Montserrat', sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      letter-spacing: 0.02em;
+      padding: 14px 16px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    input::placeholder, textarea::placeholder {
+      color: var(--text-tertiary);
+      font-weight: 300;
+      letter-spacing: 0.03em;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-soft);
+    }
+
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      padding-right: 40px;
+      cursor: pointer;
+    }
+
+    select option { background: #111; color: #eee; }
+
+    textarea {
+      resize: vertical;
+      min-height: 96px;
+      line-height: 1.6;
+    }
+
+    .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+    /* pill selectors */
+    .pills { display: flex; flex-wrap: wrap; gap: 8px; }
+
+    .pills input[type="radio"] { display: none; }
+
+    .pills label {
+      display: inline-block;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 1px;
+      padding: 9px 15px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+      cursor: pointer;
+      transition: all 0.18s;
+      margin: 0;
+    }
+
+    .pills input[type="radio"]:checked + label {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .pills label:hover {
+      border-color: var(--border-light);
+      color: var(--text-secondary);
+    }
+
+    /* CTA */
+    .btn-submit {
+      width: 100%;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 1px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      padding: 18px;
+      cursor: pointer;
+      margin-top: 36px;
+      transition: background 0.2s, transform 0.12s;
+    }
+
+    .btn-submit:hover { background: #d0541a; transform: translateY(-1px); }
+    .btn-submit:active { transform: translateY(0); }
+    .btn-submit:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
+
+    .fine-print {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 10px;
+      font-weight: 300;
+      letter-spacing: 0.1em;
+      color: var(--text-tertiary);
+      text-align: center;
+      margin-top: 16px;
+      line-height: 1.7;
+    }
+
+    /* success */
+    .success-state {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 52px 20px;
+    }
+
+    .success-icon {
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      background: var(--accent-soft);
+      border: 1px solid var(--accent-line);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 24px;
+    }
+
+    .success-icon svg { stroke: var(--accent); width: 24px; height: 24px; }
+
+    .success-state h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 36px;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+    }
+
+    .success-state p {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--text-secondary);
+      line-height: 1.75;
+      max-width: 300px;
+      letter-spacing: 0.02em;
+    }
+
+    /* footer */
+    .page-footer {
+      margin-top: 44px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .footer-logo {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: #2e2e2e;
+    }
+
+    .footer-handle {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 9px;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      color: #282828;
+    }
+
+    @media (max-width: 520px) {
+      .form-card { padding: 32px 22px; }
+      .row-2 { grid-template-columns: 1fr; }
+      .hero-title { font-size: clamp(52px, 18vw, 72px); }
+    }
+  </style>
+</head>
+<body>
+
+<div class="top-line"></div>
+
+<!-- ── HERO ── -->
+<div class="hero">
+
+  <div class="logo-wrap">
+    <svg width="230" height="72" viewBox="0 0 230 72" xmlns="http://www.w3.org/2000/svg">
+      <!-- M -->
+      <polyline points="6,60 6,12 27,46 48,12 48,60"
+        fill="none" stroke="#E8601C" stroke-width="4.5"
+        stroke-linejoin="round" stroke-linecap="round"/>
+      <!-- F -->
+      <line x1="62" y1="12" x2="62" y2="60" stroke="#E8601C" stroke-width="4.5" stroke-linecap="round"/>
+      <line x1="62" y1="12" x2="84" y2="12" stroke="#E8601C" stroke-width="4.5" stroke-linecap="round"/>
+      <line x1="62" y1="36" x2="80" y2="36" stroke="#E8601C" stroke-width="4.5" stroke-linecap="round"/>
+      <!-- separator -->
+      <line x1="97" y1="12" x2="97" y2="60" stroke="#2a2a2a" stroke-width="1"/>
+      <!-- PERFORMANCE -->
+      <text x="110" y="32"
+        font-family="'Montserrat', sans-serif"
+        font-size="13"
+        font-weight="700"
+        fill="#EFEFEF"
+        letter-spacing="5">PERFORMANCE</text>
+      <!-- thin rule -->
+      <rect x="110" y="36" width="116" height="0.8" fill="#2c2c2c"/>
+      <!-- sub -->
+      <text x="111" y="52"
+        font-family="'Montserrat', sans-serif"
+        font-size="8"
+        font-weight="400"
+        fill="#555555"
+        letter-spacing="4">CONSULTORIA FITNESS</text>
+    </svg>
+  </div>
+
+  <div class="event-pill">Evento Exclusivo · 02 de Junho</div>
+
+  <p class="hero-eyebrow">Avaliação Corporal Gratuita</p>
+
+  <h1 class="hero-title">Dia da<br/><em>Saúde</em></h1>
+
+  <div class="hero-rule">
+    <span>MF Performance</span>
+  </div>
+
+  <p class="hero-desc">
+    Garanta sua vaga para uma <strong>avaliação completa de bioimpedância</strong> com análise de composição corporal e orientação individualizada — sem custo e sem compromisso.
+  </p>
+
+</div>
+
+<!-- ── FORM CARD ── -->
+<div class="form-card">
+
+  <!-- SUCCESS STATE -->
+  <div class="success-state" id="successState">
+    <div class="success-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+    </div>
+    <h2>Vaga Confirmada</h2>
+    <p>Seu cadastro foi recebido. Em breve entraremos em contato pelo WhatsApp com todas as informações.</p>
+  </div>
+
+  <!-- FORM -->
+  <form id="regForm" action="https://formspree.io/f/mwvzynap" method="POST">
+
+    <div class="section-head">
+      <span class="section-num">01</span>
+      <span class="section-title">Identificação</span>
+    </div>
+
+    <div class="field-group">
+      <label class="field-label" for="name">Nome completo *</label>
+      <input type="text" id="name" name="nome" placeholder="Seu nome completo" required autocomplete="name"/>
+    </div>
+
+    <div class="row-2">
+      <div class="field-group">
+        <label class="field-label" for="phone">WhatsApp *</label>
+        <input type="tel" id="phone" name="whatsapp" placeholder="(11) 99999-9999" required autocomplete="tel"/>
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="age">Idade *</label>
+        <input type="number" id="age" name="idade" placeholder="Ex: 32" min="10" max="90" required/>
+      </div>
+    </div>
+
+    <div class="sep"></div>
+
+    <div class="section-head">
+      <span class="section-num">02</span>
+      <span class="section-title">Perfil de Treino</span>
+    </div>
+
+    <div class="field-group">
+      <label class="field-label">Há quanto tempo você treina?</label>
+      <div class="pills">
+        <input type="radio" id="t0" name="tempo_treino" value="Não treino ainda"/>
+        <label for="t0">Não treino</label>
+        <input type="radio" id="t1" name="tempo_treino" value="Menos de 6 meses"/>
+        <label for="t1">Menos de 6m</label>
+        <input type="radio" id="t2" name="tempo_treino" value="6 meses a 1 ano"/>
+        <label for="t2">6m – 1 ano</label>
+        <input type="radio" id="t3" name="tempo_treino" value="1 a 3 anos"/>
+        <label for="t3">1 – 3 anos</label>
+        <input type="radio" id="t4" name="tempo_treino" value="Mais de 3 anos"/>
+        <label for="t4">3+ anos</label>
+      </div>
+    </div>
+
+    <div class="field-group" style="margin-top:22px">
+      <label class="field-label">Objetivo principal *</label>
+      <div class="pills">
+        <input type="radio" id="g1" name="objetivo" value="Perda de gordura" required/>
+        <label for="g1">Perda de gordura</label>
+        <input type="radio" id="g2" name="objetivo" value="Ganho de massa"/>
+        <label for="g2">Ganho de massa</label>
+        <input type="radio" id="g3" name="objetivo" value="Saúde e qualidade de vida"/>
+        <label for="g3">Saúde geral</label>
+        <input type="radio" id="g4" name="objetivo" value="Condicionamento físico"/>
+        <label for="g4">Condicionamento</label>
+        <input type="radio" id="g5" name="objetivo" value="Reabilitação"/>
+        <label for="g5">Reabilitação</label>
+      </div>
+    </div>
+
+    <div class="sep"></div>
+
+    <div class="section-head">
+      <span class="section-num">03</span>
+      <span class="section-title">Observações</span>
+    </div>
+
+    <div class="field-group">
+      <label class="field-label" for="obs">Alguma informação relevante? (opcional)</label>
+      <textarea id="obs" name="observacao" placeholder="Lesões, restrições, expectativas ou dúvidas..."></textarea>
+    </div>
+
+    <input type="hidden" name="_subject" value="🔥 Novo cadastro — Dia da Saúde MF Performance"/>
+    <input type="hidden" name="_replyto" value=""/>
+    <input type="text" name="_gotcha" style="display:none"/>
+
+    <button type="submit" class="btn-submit" id="submitBtn">
+      Garantir Minha Vaga
+    </button>
+
+    <p class="fine-print">
+      Seus dados são tratados com total confidencialidade<br/>e utilizados exclusivamente para organização do evento.
+    </p>
+
+  </form>
+</div>
+
+<div class="page-footer">
+  <p class="footer-logo">MF Performance</p>
+  <p class="footer-handle">@personalmf_</p>
+</div>
+
+<script>
+  const phoneInput = document.getElementById('phone');
+  phoneInput.addEventListener('input', function() {
+    let v = this.value.replace(/\D/g,'');
+    if (v.length <= 11) {
+      v = v.replace(/^(\d{2})(\d)/,'($1) $2');
+      v = v.replace(/(\d{4,5})(\d{4})$/,'$1-$2');
+    }
+    this.value = v;
+  });
+
+  const form = document.getElementById('regForm');
+  const btn  = document.getElementById('submitBtn');
+  const succ = document.getElementById('successState');
+
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    btn.disabled = true;
+    btn.textContent = 'Enviando...';
+    try {
+      const res = await fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        form.style.display = 'none';
+        succ.style.display = 'flex';
+      } else {
+        btn.disabled = false;
+        btn.textContent = 'Garantir Minha Vaga';
+        alert('Algo deu errado. Tente novamente.');
+      }
+    } catch {
+      btn.disabled = false;
+      btn.textContent = 'Garantir Minha Vaga';
+      alert('Erro de conexão. Verifique e tente novamente.');
+    }
+  });
+</script>
+
+</body>
+</html>
